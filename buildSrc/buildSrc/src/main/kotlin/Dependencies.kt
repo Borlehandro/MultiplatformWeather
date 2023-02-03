@@ -28,4 +28,11 @@ object Dependencies {
             const val icons = "androidx.compose.material:material-icons-core:$version"
         }
     }
+
+    object Kodein {
+
+        private const val version = "7.18.0"
+
+        const val di = "org.kodein.di:kodein-di:$version"
+    }
 }

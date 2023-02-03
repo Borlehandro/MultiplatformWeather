@@ -33,6 +33,7 @@ kotlin {
                 implementation(Dependencies.Kotlin.Coroutines.core)
                 implementation(Dependencies.Kotlin.Serialization.serialization)
                 implementation(Dependencies.Kotlin.Serialization.gradlePlugin)
+                implementation(Dependencies.Kodein.di)
             }
         }
         val commonTest by getting {
