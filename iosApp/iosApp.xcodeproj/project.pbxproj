@@ -12,6 +12,15 @@
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		D67A7BBC0CE5CC4C0DCFE1FE /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60F62EE3BEC09A468FA19B21 /* Pods_iosApp.framework */; };
+		E899E4D32991287C00CF00F8 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4D22991287C00CF00F8 /* Inter-Bold.ttf */; };
+		E899E4D52991289100CF00F8 /* Inter-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4D42991289100CF00F8 /* Inter-Black.ttf */; };
+		E899E4DD299128A000CF00F8 /* Inter-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4D62991289E00CF00F8 /* Inter-ExtraBold.ttf */; };
+		E899E4DE299128A000CF00F8 /* Inter-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4D72991289E00CF00F8 /* Inter-Light.ttf */; };
+		E899E4DF299128A000CF00F8 /* Inter-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4D82991289E00CF00F8 /* Inter-Medium.ttf */; };
+		E899E4E0299128A000CF00F8 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4D92991289F00CF00F8 /* Inter-SemiBold.ttf */; };
+		E899E4E1299128A000CF00F8 /* Inter-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4DA2991289F00CF00F8 /* Inter-Thin.ttf */; };
+		E899E4E2299128A000CF00F8 /* Inter-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4DB2991289F00CF00F8 /* Inter-ExtraLight.ttf */; };
+		E899E4E3299128A000CF00F8 /* Inter-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E899E4DC299128A000CF00F8 /* Inter-Regular.ttf */; };
 		E8AC73F32990CD5E00BF8AA0 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8AC73F22990CD5E00BF8AA0 /* MainViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +34,15 @@
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AFFF67D91BE114B67DFB202 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
+		E899E4D22991287C00CF00F8 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
+		E899E4D42991289100CF00F8 /* Inter-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Black.ttf"; sourceTree = "<group>"; };
+		E899E4D62991289E00CF00F8 /* Inter-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraBold.ttf"; sourceTree = "<group>"; };
+		E899E4D72991289E00CF00F8 /* Inter-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Light.ttf"; sourceTree = "<group>"; };
+		E899E4D82991289E00CF00F8 /* Inter-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Medium.ttf"; sourceTree = "<group>"; };
+		E899E4D92991289F00CF00F8 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
+		E899E4DA2991289F00CF00F8 /* Inter-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Thin.ttf"; sourceTree = "<group>"; };
+		E899E4DB2991289F00CF00F8 /* Inter-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-ExtraLight.ttf"; sourceTree = "<group>"; };
+		E899E4DC299128A000CF00F8 /* Inter-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Regular.ttf"; sourceTree = "<group>"; };
 		E8AC73F22990CD5E00BF8AA0 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -85,6 +103,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E899E4D12991285A00CF00F8 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E899E4D62991289E00CF00F8 /* Inter-ExtraBold.ttf */,
+				E899E4DB2991289F00CF00F8 /* Inter-ExtraLight.ttf */,
+				E899E4D72991289E00CF00F8 /* Inter-Light.ttf */,
+				E899E4D82991289E00CF00F8 /* Inter-Medium.ttf */,
+				E899E4DC299128A000CF00F8 /* Inter-Regular.ttf */,
+				E899E4D92991289F00CF00F8 /* Inter-SemiBold.ttf */,
+				E899E4DA2991289F00CF00F8 /* Inter-Thin.ttf */,
+				E899E4D42991289100CF00F8 /* Inter-Black.ttf */,
+				E899E4D22991287C00CF00F8 /* Inter-Bold.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		E8AC73EE2990CC6400BF8AA0 /* PresentationLayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,6 +131,7 @@
 		E8AC73EF2990CC7C00BF8AA0 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E899E4D12991285A00CF00F8 /* Fonts */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 			);
 			path = Sources;
@@ -188,8 +223,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E899E4DD299128A000CF00F8 /* Inter-ExtraBold.ttf in Resources */,
+				E899E4E2299128A000CF00F8 /* Inter-ExtraLight.ttf in Resources */,
+				E899E4D32991287C00CF00F8 /* Inter-Bold.ttf in Resources */,
+				E899E4E1299128A000CF00F8 /* Inter-Thin.ttf in Resources */,
 				058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */,
 				058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */,
+				E899E4E0299128A000CF00F8 /* Inter-SemiBold.ttf in Resources */,
+				E899E4DF299128A000CF00F8 /* Inter-Medium.ttf in Resources */,
+				E899E4E3299128A000CF00F8 /* Inter-Regular.ttf in Resources */,
+				E899E4DE299128A000CF00F8 /* Inter-Light.ttf in Resources */,
+				E899E4D52991289100CF00F8 /* Inter-Black.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,6 +420,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -396,6 +441,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = iosApp/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
