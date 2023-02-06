@@ -2,7 +2,8 @@ package io.decentury.mutliplatform.weatherkmm.android.ui.weather
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.decentury.mutliplatform.weatherkmm.android.common.LoadableState
+import io.decentury.mutliplatform.weatherkmm.android.common.model.LoadableState
+import io.decentury.mutliplatform.weatherkmm.android.common.util.classLogger
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
 import io.decentury.mutliplatform.weatherkmm.model.Location
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,31 +14,28 @@ import java.util.TimeZone
 
 class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() {
 
+    private val log by classLogger()
+
     private val _state = MutableStateFlow(
         WeatherState(
             LoadableState.Initial,
-            LoadableState.Initial
-        )
+            LoadableState.Initial,
+        ),
     )
     val state = _state.asStateFlow()
 
-    // TODO: Call loadInitialData when geolocation permission is granted
-    init {
-        loadInitialData()
-    }
-
-    // TODO: Add geolocation to params
-    private fun loadInitialData() {
+    fun loadInitialData(latitude: Double, longitude: Double) {
+        log.d("Load initial data for location. Latitude: $latitude; longitude: $longitude")
         viewModelScope.launch {
-            loadCurrentWeather()
+            loadCurrentWeather(latitude, longitude)
         }.invokeOnCompletion {
             viewModelScope.launch {
-                loadFutureWeather()
+                loadFutureWeather(latitude, longitude)
             }
         }
     }
 
-    private suspend fun loadCurrentWeather() {
+    private suspend fun loadCurrentWeather(latitude: Double, longitude: Double) {
         try {
             _state.update {
                 it.copy(currentWeatherState = LoadableState.Loading)
@@ -46,11 +44,10 @@ class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() 
                 it.copy(
                     currentWeatherState = LoadableState.Success(
                         interactor.getCurrentWeather(
-                            // TODO: Use real geolocation
-                            Location(58.0, 58.0),
-                            TimeZone.getDefault().id
-                        )
-                    )
+                            Location(latitude, longitude),
+                            TimeZone.getDefault().id,
+                        ),
+                    ),
                 )
             }
         } catch (e: Exception) {
@@ -58,7 +55,7 @@ class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() 
         }
     }
 
-    private suspend fun loadFutureWeather() {
+    private suspend fun loadFutureWeather(latitude: Double, longitude: Double) {
         try {
             _state.update {
                 it.copy(futureWeatherState = LoadableState.Loading)
@@ -67,17 +64,16 @@ class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() 
                 weatherState.copy(
                     futureWeatherState = LoadableState.Success(
                         interactor.getFutureWeather(
-                            // TODO: Use real geolocation
-                            Location(58.0, 58.0),
-                            TimeZone.getDefault().id
+                            Location(latitude, longitude),
+                            TimeZone.getDefault().id,
                         ).map {
                             WeatherState.FutureWeatherItem(
                                 it.key,
                                 it.value.type,
-                                it.value.temperature
+                                it.value.temperature,
                             )
-                        }
-                    )
+                        },
+                    ),
                 )
             }
         } catch (e: Exception) {

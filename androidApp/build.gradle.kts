@@ -53,4 +53,6 @@ dependencies {
     implementation(Dependencies.Kodein.androidCommon)
     implementation(Dependencies.Kodein.androidViewModel)
     implementation(Dependencies.Kodein.compose)
+
+    implementation(Dependencies.Google.locationService)
 }

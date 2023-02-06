@@ -44,4 +44,9 @@ object Dependencies {
             "org.kodein.di:kodein-di-framework-android-x-viewmodel:$version"
         const val compose = "org.kodein.di:kodein-di-framework-compose:$version"
     }
+
+    object Google {
+
+        const val locationService = "com.google.android.gms:play-services-location:21.0.1"
+    }
 }
