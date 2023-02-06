@@ -10,8 +10,10 @@ import org.kodein.di.android.x.androidXModule
 class WeatherKmmApp : Application(), DIAware {
 
     override val di by DI.lazy {
-        import(androidXModule(this@WeatherKmmApp))
-        import(CoreInjector.coreModule)
-        import(viewModelsModule)
+        importAll(
+            androidXModule(this@WeatherKmmApp),
+            CoreInjector.coreModule,
+            viewModelsModule
+        )
     }
 }

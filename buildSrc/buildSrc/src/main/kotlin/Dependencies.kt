@@ -39,9 +39,9 @@ object Dependencies {
         private const val version = "7.18.0"
 
         const val di = "org.kodein.di:kodein-di:$version"
-        const val androidCommon = "org.kodein.di:kodein-di-framework-android-core:$version"
+        const val androidCommon = "org.kodein.di:kodein-di-framework-android-x:$version"
         const val androidViewModel =
             "org.kodein.di:kodein-di-framework-android-x-viewmodel:$version"
-
+        const val compose = "org.kodein.di:kodein-di-framework-compose:$version"
     }
 }
