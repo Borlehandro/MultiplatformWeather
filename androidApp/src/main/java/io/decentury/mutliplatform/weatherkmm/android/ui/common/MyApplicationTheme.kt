@@ -1,4 +1,4 @@
-package io.decentury.mutliplatform.weatherkmm.android
+package io.decentury.mutliplatform.weatherkmm.android.ui.common
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape

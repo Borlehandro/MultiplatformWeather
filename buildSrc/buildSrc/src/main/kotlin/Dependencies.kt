@@ -16,8 +16,13 @@ object Dependencies {
     }
 
     object Android {
+
+        private const val lifecycleVersion = "2.5.1"
+
         const val gradlePlugin = "com.android.tools.build:gradle:7.4.0"
         const val composeActivity = "androidx.activity:activity-compose:1.5.1"
+        const val viewModelCompose =
+            "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion"
 
         object Compose {
             private const val version = "1.3.1"
@@ -34,5 +39,9 @@ object Dependencies {
         private const val version = "7.18.0"
 
         const val di = "org.kodein.di:kodein-di:$version"
+        const val androidCommon = "org.kodein.di:kodein-di-framework-android-core:$version"
+        const val androidViewModel =
+            "org.kodein.di:kodein-di-framework-android-x-viewmodel:$version"
+
     }
 }

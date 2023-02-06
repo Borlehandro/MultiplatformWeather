@@ -42,9 +42,14 @@ dependencies {
     implementation(project(":core"))
 
     implementation(Dependencies.Android.composeActivity)
+    implementation(Dependencies.Android.viewModelCompose)
+
     implementation(Dependencies.Android.Compose.runtime)
     implementation(Dependencies.Android.Compose.material)
     implementation(Dependencies.Android.Compose.ui)
     implementation(Dependencies.Android.Compose.icons)
     implementation(Dependencies.Android.Compose.tooling)
+
+    implementation(Dependencies.Kodein.androidCommon)
+    implementation(Dependencies.Kodein.androidViewModel)
 }
