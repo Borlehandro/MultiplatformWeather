@@ -16,6 +16,7 @@ final class MainViewModel: ObservableObject {
     @Published var rainFall = ""
     @Published var windSpeed = ""
     @Published var humidity = ""
+    @Published var location = ""
     init() {
         setData()
     }
@@ -29,6 +30,7 @@ final class MainViewModel: ObservableObject {
             self.humidity = "\(weather.humidity)"
             self.type = weather.type.name
         }
+        location = getCurrentTimeZone()
     }
     
     private func getLocation() -> Location {
