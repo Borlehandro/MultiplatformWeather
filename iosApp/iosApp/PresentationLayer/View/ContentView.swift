@@ -29,7 +29,7 @@ struct ContentView: View {
                 paramsView(paransDescription: viewModel.rainFall + " " + "cm", imageName: "rainFallIcon")
             }.frame(maxWidth: .infinity)
         }
-        .background(Color.mint.ignoresSafeArea())
+        .background(LinearGradient(colors: [.white, .orange], startPoint: .topLeading, endPoint: .bottomTrailing))
     }
     
     func paramsView(paransDescription: String, imageName: String) -> some View {
