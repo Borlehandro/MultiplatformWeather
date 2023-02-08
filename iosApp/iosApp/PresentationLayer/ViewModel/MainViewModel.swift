@@ -17,6 +17,9 @@ final class MainViewModel: ObservableObject {
     @Published var windSpeed = ""
     @Published var humidity = ""
     @Published var location = ""
+    @Published var futureWeatherParams: [String : Any] = [:]
+    @Published var futureWeatherKeys: [String] = []
+    
     init() {
         setData()
     }
@@ -30,6 +33,17 @@ final class MainViewModel: ObservableObject {
             self.humidity = "\(weather.humidity)"
             self.type = weather.type.name
         }
+        
+        CoreInjector.init().provideWeatherInteractor().getFutureWeather(location: getLocation(), timeZone: getCurrentTimeZone()) { futureWeather, error in
+            guard let futureWeather = futureWeather else { return }
+            self.futureWeatherParams = futureWeather
+            for i in futureWeather {
+                self.futureWeatherKeys.append(i.key)
+            }
+            print(self.futureWeatherKeys)
+
+        }
+        
         location = getCurrentTimeZone()
     }
     
