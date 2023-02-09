@@ -1,6 +1,7 @@
 plugins {
     kotlin("native.cocoapods")
     id("multiplatform-setup")
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -32,8 +33,13 @@ kotlin {
             dependencies {
                 implementation(Dependencies.Kotlin.Coroutines.core)
                 implementation(Dependencies.Kotlin.Serialization.serialization)
-                implementation(Dependencies.Kotlin.Serialization.gradlePlugin)
+
                 implementation(Dependencies.Kodein.di)
+
+                implementation(Dependencies.Ktor.core)
+                implementation(Dependencies.Ktor.negotiation)
+                implementation(Dependencies.Ktor.serialization)
+                implementation(Dependencies.Ktor.logging)
             }
         }
         val commonTest by getting {
@@ -41,12 +47,19 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation(Dependencies.Ktor.android)
+            }
+        }
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
         val iosMain by creating {
             dependsOn(commonMain)
+            dependencies {
+                implementation(Dependencies.Ktor.darwin)
+            }
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)

@@ -1,10 +1,10 @@
 package io.decentury.mutliplatform.weatherkmm.di
 
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
+import kotlin.native.concurrent.ThreadLocal
 import org.kodein.di.DI
 import org.kodein.di.direct
 import org.kodein.di.instance
-import kotlin.native.concurrent.ThreadLocal
 
 // TODO: This object use service locator antipattern and has bad scalability.
 //  Think about better architecture solution.
@@ -12,7 +12,7 @@ import kotlin.native.concurrent.ThreadLocal
 object CoreInjector {
 
     val coreModule = DI.Module("core") {
-        importAll(domainModule)
+        importAll(networkModule, apiModule, dataModule, domainModule)
     }
 
     val coreContainer = DI.lazy {

@@ -4,8 +4,9 @@ import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractorImpl
 import org.kodein.di.DI
 import org.kodein.di.bindSingleton
+import org.kodein.di.instance
 
 internal val domainModule = DI.Module("coreModule") {
 
-    bindSingleton<WeatherInteractor> { WeatherInteractorImpl() }
+    bindSingleton<WeatherInteractor> { WeatherInteractorImpl(instance()) }
 }

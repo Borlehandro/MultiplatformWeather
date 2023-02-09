@@ -49,4 +49,17 @@ object Dependencies {
 
         const val locationService = "com.google.android.gms:play-services-location:21.0.1"
     }
+
+    object Ktor {
+
+        private const val version = "2.2.3"
+
+        const val core = "io.ktor:ktor-client-core:$version"
+        const val negotiation = "io.ktor:ktor-client-content-negotiation:$version"
+        const val serialization = "io.ktor:ktor-serialization-kotlinx-json:$version"
+        const val logging = "io.ktor:ktor-client-logging:$version"
+
+        const val android = "io.ktor:ktor-client-android:$version"
+        const val darwin = "io.ktor:ktor-client-darwin:$version"
+    }
 }
