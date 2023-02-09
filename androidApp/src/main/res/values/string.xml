@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WeatherKmm</string>
+    <string name="info_type_rainfall">Rainfall</string>
+    <string name="info_type_wind">Wind</string>
+    <string name="info_type_humidity">Humidity</string>
+    <string name="measure_cm">cm</string>
+    <string name="measure_km_h">km/h</string>
+    <string name="measure_percent">%</string>
+    <string name="weather_type_clear_text">Clear</string>
+    <string name="weather_type_cloudy_text">Cloudy</string>
+    <string name="weather_type_party_cloudy_text">Party cloudy</string>
+    <string name="weather_type_cloudy_rain_text">Rain</string>
+    <string name="weather_type_party_cloudy_rain_text">Rainy</string>
+    <string name="temperature_degrees_template">%1$d°</string>
 </resources>
