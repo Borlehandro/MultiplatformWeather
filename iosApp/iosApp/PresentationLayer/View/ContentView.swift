@@ -31,16 +31,16 @@ struct ContentView: View {
                         Text(viewModel.type)
                     }
                 }
-                paramsView(paransDescription: viewModel.windSpeed + " " + "km/h", imageName: "windIcon")
-                paramsView(paransDescription: viewModel.rainFall + " " + "cm", imageName: "rainFallIcon")
-                paramsView(paransDescription: viewModel.humidity + " " + "%", imageName: "humidityIcon")
+                paramsView(paransDescription: viewModel.windSpeed + " " + "km/h", imageName: "windIcon", type: "Wind")
+                paramsView(paransDescription: viewModel.rainFall + " " + "cm", imageName: "rainFallIcon", type: "RainFall")
+                paramsView(paransDescription: viewModel.humidity + " " + "%", imageName: "humidityIcon", type: "Humidity")
                 futureWeatherCollection()
             }.frame(maxWidth: .infinity)
         }
         .background(LinearGradient(colors: [.white, .orange], startPoint: .topLeading, endPoint: .bottomTrailing))
     }
     
-    func paramsView(paransDescription: String, imageName: String) -> some View {
+    func paramsView(paransDescription: String, imageName: String, type: String) -> some View {
             ZStack {
                 HStack {
                     Image(imageName)
@@ -51,6 +51,9 @@ struct ContentView: View {
                         .padding(.leading, 20)
                         .padding(.top, 10)
                         .padding(.bottom, 10)
+                    Text(type)
+                        .font(.custom("Inter-Ligh", size: 20))
+                        .padding(.trailing, 40)
                     Spacer()
                     Text(paransDescription)
                         .font(.custom("Inter-Ligh", size: 20))
@@ -69,17 +72,43 @@ struct ContentView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 10) {
                 ForEach(0..<viewModel.futureWeatherKeys.count, id: \.self) { index in
-                    Text(viewModel.futureWeatherKeys[index])
-                        .foregroundColor(.black)
-                        .font(.custom("Inter-Bold", size: 12))
-                        .frame(width: 32, height: 56)
-                        .background(Color.white)
-                        .opacity(0.7)
-                        .cornerRadius(20)
+
+                    futureTimeeCell(index: index)
                 }
                 .padding(.top, 30)
             }
         }
+    }
+    
+    func futureTimeeCell(index: Int) -> some View {
+        ZStack {
+            VStack {
+                Text(viewModel.futureWeatherKeys[index])
+                    .foregroundColor(.black)
+                    .font(.custom("Inter-Light", size: 7))
+                    .padding(.top, 8)
+                if !viewModel.futureWeatherType.isEmpty && index <= viewModel.futureWeatherType.count - 1 {
+                    Image(viewModel.futureWeatherType[index])
+                        .resizable()
+                        .scaledToFit()
+                        .shadow(radius: 10)
+                        .frame(width: 20, height: 20)
+                        .padding(.top, 0)
+                }
+                if !viewModel.futureWeatherTemperature.isEmpty && index <= viewModel.futureWeatherTemperature.count - 1  {
+                    Text(viewModel.futureWeatherTemperature[index])
+                        .foregroundColor(.black)
+                        .font(.custom("Inter-Bold", size: 7))
+                        .padding(.top, 0)
+                        .padding(.bottom, 8)
+                }
+            }
+            .frame(width: 32, height: 60)
+            .background(Color.white)
+            .opacity(0.7)
+            .cornerRadius(20)
+        }
+        
     }
 }
 
