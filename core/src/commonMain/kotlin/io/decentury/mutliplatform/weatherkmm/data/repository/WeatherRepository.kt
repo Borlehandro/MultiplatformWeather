@@ -6,5 +6,5 @@ import io.decentury.mutliplatform.weatherkmm.model.Weather
 interface WeatherRepository {
 
     suspend fun current(location: Location): Weather
-    suspend fun future(location: Location): Map<String, Weather>
+    suspend fun future(location: Location, timezone: String): Map<String, Weather>
 }

@@ -4,6 +4,9 @@ object Dependencies {
         private const val version = "1.8.0"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
+        private const val datetimeVersion = "0.4.0"
+        const val datetime = "org.jetbrains.kotlinx:kotlinx-datetime:$datetimeVersion"
+
         object Serialization {
             const val gradlePlugin = "org.jetbrains.kotlin:kotlin-serialization:1.6.21"
             const val serialization = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.0"

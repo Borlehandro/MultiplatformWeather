@@ -1,4 +1,4 @@
-package io.decentury.mutliplatform.weatherkmm.network.weather.response
+package io.decentury.mutliplatform.weatherkmm.network.weather.response.current
 
 import kotlinx.serialization.Serializable
 

@@ -33,6 +33,7 @@ kotlin {
             dependencies {
                 implementation(Dependencies.Kotlin.Coroutines.core)
                 implementation(Dependencies.Kotlin.Serialization.serialization)
+                implementation(Dependencies.Kotlin.datetime)
 
                 implementation(Dependencies.Kodein.di)
 

@@ -60,7 +60,6 @@ internal val networkModule = DI.Module("networkModule") {
                     request.apply {
                         // TODO: Move key to local storage
                         parameter("apikey", "UNHDFTpeSz6RWKFEJNyiLTJiOghMGMVu")
-                        parameter("fields", "core")
                         parameter("units", "metric")
                     },
                 )
