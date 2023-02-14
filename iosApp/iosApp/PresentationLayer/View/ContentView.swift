@@ -10,8 +10,10 @@ struct ContentView: View {
                 HStack(alignment: .center) {
                     Spacer(minLength: 20)
                     VStack(alignment: .leading) {
-                        Text(viewModel.location)
-                            .font(.custom("Inter-Bold", size: 30))
+                        Text("Новосибирск")
+                            .font(.custom("Inter-Bold", size: 22))
+                            .padding(20)
+                            .lineLimit(1)
                         Text("\(Date().formatted(.dateTime.day().month()))")
                     }
                     Spacer()
@@ -76,7 +78,7 @@ struct ContentView: View {
                     futureTimeeCell(index: index)
                 }
                 .padding(.top, 30)
-            }
+            }.padding(.leading, 20)
         }
     }
     
