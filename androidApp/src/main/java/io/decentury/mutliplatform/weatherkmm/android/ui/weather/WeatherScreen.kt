@@ -1,11 +1,5 @@
 package io.decentury.mutliplatform.weatherkmm.android.ui.weather
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,31 +8,38 @@ import android.location.Location
 import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.* // ktlint-disable no-wildcard-imports
+import androidx.compose.foundation.* // ktlint-disable no-wildcard-imports
+import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.* // ktlint-disable no-wildcard-imports
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.runtime.remember
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.decentury.mutliplatform.weatherkmm.android.R
-import io.decentury.mutliplatform.weatherkmm.android.ui.common.Colors
-import io.decentury.mutliplatform.weatherkmm.model.Weather
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import io.decentury.mutliplatform.weatherkmm.android.R
+import io.decentury.mutliplatform.weatherkmm.android.common.model.LoadableState
 import io.decentury.mutliplatform.weatherkmm.android.common.model.forceData
+import io.decentury.mutliplatform.weatherkmm.android.ui.common.Colors
+import io.decentury.mutliplatform.weatherkmm.android.ui.common.ShimmerSpacer
+import io.decentury.mutliplatform.weatherkmm.model.Weather
 import org.kodein.di.compose.rememberInstance
 
 private const val GEOLOCATION_UPDATE_INTERVAL = 1_000L
@@ -51,10 +52,10 @@ fun WeatherScreen() {
     val viewModel by rememberInstance<WeatherViewModel>()
     val state by viewModel.state.collectAsState()
     // DI
-    val appContext by rememberInstance<Context>()
+    val context = LocalContext.current
     // Location
     val locationClient = remember {
-        LocationServices.getFusedLocationProviderClient(appContext)
+        LocationServices.getFusedLocationProviderClient(context)
     }
     val locationListener = remember {
         object : LocationListener {
@@ -77,7 +78,7 @@ fun WeatherScreen() {
     )
     val scrollState = rememberScrollState()
     LaunchedEffect(SINGLE_LAUNCH_EFFECT_KEY) {
-        if (!isLocationAccessPermitted(appContext)) {
+        if (!isLocationAccessPermitted(context)) {
             launcher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
         } else {
             locationClient.requestLocationUpdates(
@@ -95,20 +96,17 @@ fun WeatherScreen() {
                     listOf(
                         Colors.bgWeatherScreenGradientStart,
                         Colors.bgWeatherScreenGradientCenter,
-                        Colors.bgWeatherScreenGradientEnd
-                    )
-                )
+                        Colors.bgWeatherScreenGradientEnd,
+                    ),
+                ),
             )
             .verticalScroll(state = scrollState)
-            .padding(bottom = 16.dp)
+            .padding(bottom = 16.dp),
     ) {
         TopBar()
         GeoAndDate("Sweden", "Stockholm", "Tue, Jun 30")
-        state.currentWeatherState.forceData()?.let {
-            TypeAndTemperature(it.temperature, it.type)
-            Details(it.rainFall, it.windSpeed, it.humidity)
-        }
-        state.futureWeatherState.forceData()?.let { WeatherByHourList(it) }
+        CurrentWeather(state.currentWeatherState)
+        FutureWeather(state.futureWeatherState)
     }
 }
 
@@ -118,15 +116,15 @@ private fun TopBar() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_search),
-            contentDescription = null
+            contentDescription = null,
         )
         Image(
             painter = painterResource(id = R.drawable.ic_menu),
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
@@ -135,28 +133,72 @@ private fun TopBar() {
 private fun GeoAndDate(
     country: String,
     city: String,
-    date: String
+    date: String,
 ) {
     Column(
         modifier = Modifier
-            .padding(start = 24.dp)
+            .padding(start = 24.dp),
     ) {
         Text(
             text = "$city,",
             color = Colors.mainText,
-            fontSize = 40.sp
+            fontSize = 40.sp,
         )
         Text(
             text = country,
             color = Colors.mainText,
-            fontSize = 40.sp
+            fontSize = 40.sp,
         )
         Text(
             text = date,
             Modifier.padding(top = 12.dp),
             color = Colors.grayText,
-            fontSize = 24.sp
+            fontSize = 24.sp,
         )
+    }
+}
+
+@Composable
+private fun CurrentWeather(state: LoadableState<Weather>) {
+    if (state is LoadableState.Success) {
+        with(state.data) {
+            TypeAndTemperature(temperature, type)
+            Details(rainFall, windSpeed, humidity)
+        }
+    } else {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp),
+            Arrangement.Center,
+        ) {
+            ShimmerSpacer(
+                modifier = Modifier
+                    .size(160.dp)
+                    .clip(CircleShape),
+            )
+            ShimmerSpacer(
+                modifier = Modifier
+                    .padding(start = 10.dp)
+                    .size(160.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+            )
+        }
+        Column(
+            modifier = Modifier
+                .padding(24.dp)
+                .fillMaxWidth(),
+        ) {
+            repeat(3) {
+                ShimmerSpacer(
+                    modifier = Modifier
+                        .padding(bottom = 10.dp)
+                        .fillMaxWidth()
+                        .height(60.dp)
+                        .clip(RoundedCornerShape(10.dp)),
+                )
+            }
+        }
     }
 }
 
@@ -166,7 +208,7 @@ private fun TypeAndTemperature(temperature: Int, type: Weather.Type) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 10.dp),
-        Arrangement.Center
+        Arrangement.Center,
     ) {
         Image(
             painter = painterResource(
@@ -176,16 +218,19 @@ private fun TypeAndTemperature(temperature: Int, type: Weather.Type) {
                     Weather.Type.PARTY_CLOUDY -> R.drawable.ic_party_cloudy
                     Weather.Type.CLOUDY_RAIN -> R.drawable.ic_cloudy_rain
                     Weather.Type.PARTY_CLOUDY_RAIN -> R.drawable.ic_party_cloudy_rain
-                }
+                },
             ),
-            contentDescription = null
+            contentDescription = null,
         )
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(start = 10.dp),
+        ) {
             Text(
                 text = temperature.toString(),
                 color = Colors.mainText,
                 fontWeight = FontWeight.W900,
-                fontSize = 90.sp
+                fontSize = 90.sp,
             )
             Text(
                 text = stringResource(
@@ -195,16 +240,16 @@ private fun TypeAndTemperature(temperature: Int, type: Weather.Type) {
                         Weather.Type.PARTY_CLOUDY -> R.string.weather_type_party_cloudy_text
                         Weather.Type.CLOUDY_RAIN -> R.string.weather_type_cloudy_rain_text
                         Weather.Type.PARTY_CLOUDY_RAIN -> R.string.weather_type_party_cloudy_rain_text
-                    }
+                    },
                 ),
                 color = Colors.mainText,
                 fontSize = 30.sp,
-                modifier = Modifier.align(CenterHorizontally)
+                modifier = Modifier.align(CenterHorizontally),
             )
         }
         Image(
             painter = painterResource(id = R.drawable.ic_temperature_degree),
-            contentDescription = null
+            contentDescription = null,
         )
     }
 }
@@ -214,25 +259,25 @@ private fun Details(rainfall: Int, wind: Int, humidity: Int) {
     Column(
         modifier = Modifier
             .padding(24.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         DetailsItem(
             value = rainfall,
             type = stringResource(id = R.string.info_type_rainfall),
             measure = stringResource(id = R.string.measure_cm),
-            drawableId = R.drawable.ic_rainfall
+            drawableId = R.drawable.ic_rainfall,
         )
         DetailsItem(
             value = wind,
             type = stringResource(id = R.string.info_type_wind),
             measure = stringResource(id = R.string.measure_km_h),
-            drawableId = R.drawable.ic_wind
+            drawableId = R.drawable.ic_wind,
         )
         DetailsItem(
             value = humidity,
             type = stringResource(id = R.string.info_type_humidity),
             measure = stringResource(id = R.string.measure_percent),
-            drawableId = R.drawable.ic_humidity
+            drawableId = R.drawable.ic_humidity,
         )
     }
 }
@@ -246,23 +291,23 @@ private fun DetailsItem(value: Int, type: String, measure: String, drawableId: I
             .height(60.dp)
             .clip(shape = RoundedCornerShape(10.dp))
             .background(color = Colors.bgGray36),
-        Arrangement.SpaceBetween
+        Arrangement.SpaceBetween,
     ) {
         Row(
             modifier = Modifier
                 .padding(start = 20.dp)
-                .align(CenterVertically)
+                .align(CenterVertically),
         ) {
             Image(
                 painter = painterResource(id = drawableId),
-                contentDescription = null
+                contentDescription = null,
             )
             Text(
                 modifier = Modifier
                     .align(CenterVertically)
                     .padding(start = 16.dp),
                 text = type,
-                color = Colors.mainText
+                color = Colors.mainText,
             )
         }
         Text(
@@ -270,26 +315,35 @@ private fun DetailsItem(value: Int, type: String, measure: String, drawableId: I
                 .align(CenterVertically)
                 .padding(end = 30.dp),
             text = value.toString() + measure,
-            color = Colors.mainText
+            color = Colors.mainText,
         )
     }
 }
 
 @Composable
-private fun WeatherByHourList(items: List<WeatherState.FutureWeatherItem>) {
+private fun FutureWeather(state: LoadableState<List<WeatherState.FutureWeatherItem>>) {
     Column {
         Divider(
             Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
             thickness = 1.dp,
-            color = Colors.bgGray36
+            color = Colors.bgGray36,
         )
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp)
-        ) {
+        WeatherByHourList(state.forceData())
+    }
+}
+
+@Composable
+private fun WeatherByHourList(items: List<WeatherState.FutureWeatherItem>?) {
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
+    ) {
+        items?.let {
             items(items) {
                 WeatherByHourItem(it.time, it.temperature, it.type)
             }
+        } ?: items(12) {
+            WeatherByHourItemShimmer()
         }
     }
 }
@@ -302,7 +356,7 @@ private fun WeatherByHourItem(time: String, temperature: Int, type: Weather.Type
             .width(45.dp)
             .clip(shape = RoundedCornerShape(20.dp))
             .background(color = Colors.bgGray36),
-        Arrangement.Center
+        Arrangement.Center,
     ) {
         Text(
             text = time,
@@ -310,7 +364,7 @@ private fun WeatherByHourItem(time: String, temperature: Int, type: Weather.Type
                 .align(CenterHorizontally)
                 .padding(bottom = 4.dp),
             fontSize = 11.sp,
-            color = Colors.grayText
+            color = Colors.grayText,
         )
         Image(
             painter = painterResource(
@@ -320,13 +374,13 @@ private fun WeatherByHourItem(time: String, temperature: Int, type: Weather.Type
                     Weather.Type.PARTY_CLOUDY -> R.drawable.ic_party_cloudy
                     Weather.Type.CLOUDY_RAIN -> R.drawable.ic_cloudy_rain
                     Weather.Type.PARTY_CLOUDY_RAIN -> R.drawable.ic_party_cloudy_rain
-                }
+                },
             ),
             contentDescription = null,
             modifier = Modifier
                 .align(CenterHorizontally)
                 .width(20.dp)
-                .height(20.dp)
+                .height(20.dp),
         )
         Text(
             text = stringResource(
@@ -338,9 +392,19 @@ private fun WeatherByHourItem(time: String, temperature: Int, type: Weather.Type
                 .padding(top = 4.dp),
             fontSize = 14.sp,
             color = Colors.mainText,
-            fontWeight = FontWeight.W700
+            fontWeight = FontWeight.W700,
         )
     }
+}
+
+@Composable
+private fun WeatherByHourItemShimmer() {
+    ShimmerSpacer(
+        modifier = Modifier
+            .height(90.dp)
+            .width(45.dp)
+            .clip(RoundedCornerShape(20.dp)),
+    )
 }
 
 @Composable

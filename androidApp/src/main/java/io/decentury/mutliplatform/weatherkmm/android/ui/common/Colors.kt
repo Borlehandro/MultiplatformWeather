@@ -9,4 +9,7 @@ object Colors {
     val bgGray36 = Color(0X5CFFFFFF)
     val mainText = Color(0XFF313341)
     val grayText = Color(0XFF9A938C)
+    val shimmerGradientStart = Color(0xA6EAEAEA)
+    val shimmerGradientCenter = Color(0xA6F6F6F6)
+    val shimmerGradientEnd = Color(0xA6EAEAEA)
 }
