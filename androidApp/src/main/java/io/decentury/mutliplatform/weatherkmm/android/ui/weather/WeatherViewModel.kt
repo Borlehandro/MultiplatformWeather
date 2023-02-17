@@ -4,15 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.decentury.mutliplatform.weatherkmm.android.common.model.LoadableState
 import io.decentury.mutliplatform.weatherkmm.android.common.util.classLogger
+import io.decentury.mutliplatform.weatherkmm.domain.GeocodingInteractor
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
 import io.decentury.mutliplatform.weatherkmm.model.Location
+import io.decentury.mutliplatform.weatherkmm.utils.toFirstCapital
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
-import java.util.TimeZone
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
-class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() {
+class WeatherViewModel(
+    private val interactor: WeatherInteractor,
+    private val geocodingInteractor: GeocodingInteractor,
+) : ViewModel() {
 
     private val log by classLogger()
 
@@ -20,18 +28,60 @@ class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() 
         WeatherState(
             LoadableState.Initial,
             LoadableState.Initial,
+            LoadableState.Initial,
         ),
     )
     val state = _state.asStateFlow()
 
-    fun loadInitialData(latitude: Double, longitude: Double) {
-        log.d("Load initial data for location. Latitude: $latitude; longitude: $longitude")
+    fun loadInitialData(latitude: Double, longitude: Double, locale: String) {
+        log.d(
+            "Load initial data for location. Latitude: $latitude; longitude: $longitude. " +
+                "User device locale: $locale.",
+        )
         viewModelScope.launch {
-            loadCurrentWeather(latitude, longitude)
-        }.invokeOnCompletion {
-            viewModelScope.launch {
-                loadFutureWeather(latitude, longitude)
+            val loadCurrentJobs = listOf(
+                viewModelScope.launch {
+                    loadCurrentLocation(latitude, longitude, locale)
+                },
+                viewModelScope.launch {
+                    loadCurrentWeather(latitude, longitude)
+                },
+            )
+            loadCurrentJobs.joinAll()
+            loadFutureWeather(latitude, longitude)
+        }
+    }
+
+    private suspend fun loadCurrentLocation(latitude: Double, longitude: Double, locale: String) {
+        try {
+            _state.update {
+                it.copy(locationWithDate = LoadableState.Loading)
             }
+            val countryWithCity = geocodingInteractor.getCountryWithCity(
+                Location(latitude, longitude),
+                locale,
+            )
+            _state.update {
+                it.copy(
+                    locationWithDate = LoadableState.Success(
+                        WeatherState.LocationWithDate(
+                            country = countryWithCity?.country,
+                            city = countryWithCity?.city,
+                            formattedDate = Clock.System.now()
+                                .toLocalDateTime(TimeZone.currentSystemDefault())
+                                .date
+                                .let { date ->
+                                    // Format to "Tue, Jun 30"
+                                    "${date.dayOfWeek.name.substring(0, 3).toFirstCapital()}, " +
+                                        "${date.month.name.substring(0, 3).toFirstCapital()} " +
+                                        "${date.dayOfMonth}"
+                                },
+                        ),
+                    ),
+                )
+            }
+        } catch (e: Exception) {
+            _state.update { it.copy(locationWithDate = LoadableState.Error(e)) }
         }
     }
 
@@ -45,7 +95,7 @@ class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() 
                     currentWeatherState = LoadableState.Success(
                         interactor.getCurrentWeather(
                             Location(latitude, longitude),
-                            TimeZone.getDefault().id,
+                            TimeZone.currentSystemDefault().id,
                         ),
                     ),
                 )
@@ -65,7 +115,7 @@ class WeatherViewModel(private val interactor: WeatherInteractor) : ViewModel() 
                     futureWeatherState = LoadableState.Success(
                         interactor.getFutureWeather(
                             Location(latitude, longitude),
-                            TimeZone.getDefault().id,
+                            TimeZone.currentSystemDefault().id,
                         ).map {
                             WeatherState.FutureWeatherItem(
                                 it.key,

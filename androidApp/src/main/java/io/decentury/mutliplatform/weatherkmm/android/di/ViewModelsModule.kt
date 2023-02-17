@@ -6,5 +6,5 @@ import org.kodein.di.bindProvider
 import org.kodein.di.instance
 
 val viewModelsModule = DI.Module("androidViewModels") {
-    bindProvider { WeatherViewModel(instance()) }
+    bindProvider { WeatherViewModel(instance(), instance()) }
 }

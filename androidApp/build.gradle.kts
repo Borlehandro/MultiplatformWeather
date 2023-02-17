@@ -41,6 +41,8 @@ android {
 dependencies {
     implementation(project(":core"))
 
+    implementation(Dependencies.Kotlin.datetime)
+
     implementation(Dependencies.Android.composeActivity)
     implementation(Dependencies.Android.viewModelCompose)
 

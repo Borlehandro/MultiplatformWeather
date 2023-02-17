@@ -8,16 +8,16 @@ import android.location.Location
 import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.* // ktlint-disable no-wildcard-imports
-import androidx.compose.foundation.* // ktlint-disable no-wildcard-imports
-import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
+import androidx.compose.animation.core.*
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.* // ktlint-disable no-wildcard-imports
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -40,6 +40,7 @@ import io.decentury.mutliplatform.weatherkmm.android.common.model.forceData
 import io.decentury.mutliplatform.weatherkmm.android.ui.common.Colors
 import io.decentury.mutliplatform.weatherkmm.android.ui.common.ShimmerSpacer
 import io.decentury.mutliplatform.weatherkmm.model.Weather
+import java.util.Locale
 import org.kodein.di.compose.rememberInstance
 
 private const val GEOLOCATION_UPDATE_INTERVAL = 1_000L
@@ -60,7 +61,11 @@ fun WeatherScreen() {
     val locationListener = remember {
         object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                viewModel.loadInitialData(location.latitude, location.longitude)
+                viewModel.loadInitialData(
+                    location.latitude,
+                    location.longitude,
+                    Locale.getDefault().toString(),
+                )
                 locationClient.removeLocationUpdates(this)
             }
         }
@@ -104,7 +109,7 @@ fun WeatherScreen() {
             .padding(bottom = 16.dp),
     ) {
         TopBar()
-        GeoAndDate("Sweden", "Stockholm", "Tue, Jun 30")
+        GeoAndDate(state.locationWithDate)
         CurrentWeather(state.currentWeatherState)
         FutureWeather(state.futureWeatherState)
     }
@@ -131,30 +136,45 @@ private fun TopBar() {
 
 @Composable
 private fun GeoAndDate(
-    country: String,
-    city: String,
-    date: String,
+    state: LoadableState<WeatherState.LocationWithDate>,
 ) {
     Column(
         modifier = Modifier
             .padding(start = 24.dp),
     ) {
-        Text(
-            text = "$city,",
-            color = Colors.mainText,
-            fontSize = 40.sp,
-        )
-        Text(
-            text = country,
-            color = Colors.mainText,
-            fontSize = 40.sp,
-        )
-        Text(
-            text = date,
-            Modifier.padding(top = 12.dp),
-            color = Colors.grayText,
-            fontSize = 24.sp,
-        )
+        if (state is LoadableState.Success) {
+            val data = state.data
+            data.city?.let {
+                Text(
+                    text = "$it,",
+                    color = Colors.mainText,
+                    fontSize = 40.sp,
+                )
+            }
+            data.country?.let {
+                Text(
+                    text = data.country,
+                    color = Colors.mainText,
+                    fontSize = 40.sp,
+                )
+            }
+            Text(
+                text = data.formattedDate,
+                Modifier.padding(top = 12.dp),
+                color = Colors.grayText,
+                fontSize = 24.sp,
+            )
+        } else {
+            repeat(3) {
+                ShimmerSpacer(
+                    modifier = Modifier
+                        .fillMaxWidth(0.4f + 0.1f * (3 - it))
+                        .padding(top = if (it > 0) 12.dp else 0.dp)
+                        .height(if (it > 1) 40.dp else 48.dp)
+                        .clip(RoundedCornerShape(10.dp)),
+                )
+            }
+        }
     }
 }
 
