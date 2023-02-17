@@ -21,7 +21,9 @@ import org.kodein.di.bindSingleton
 
 private const val CONNECTION_TIMEOUT_MILLIS = 10_000L
 private const val REQUEST_TIMEOUT_MILLIS = 30_000L
-private const val BASE_HOST_URL = "https://api.tomorrow.io/v4/"
+
+private const val WEATHER_HOST = "api.tomorrow.io"
+private const val BASE_HEATHER_HOST_URL = "https://$WEATHER_HOST/v4/"
 
 internal val networkModule = DI.Module("networkModule") {
 
@@ -50,7 +52,7 @@ internal val networkModule = DI.Module("networkModule") {
             }
 
             defaultRequest {
-                url(BASE_HOST_URL)
+                url(BASE_HEATHER_HOST_URL)
                 header("Content-Type", "application/json; charset=UTF-8")
             }
         }.apply {
@@ -58,9 +60,12 @@ internal val networkModule = DI.Module("networkModule") {
             plugin(HttpSend).intercept { request ->
                 execute(
                     request.apply {
-                        // TODO: Move key to local storage
-                        parameter("apikey", "UNHDFTpeSz6RWKFEJNyiLTJiOghMGMVu")
-                        parameter("units", "metric")
+                        // Intercept only weather requests
+                        if (request.url.host == WEATHER_HOST) {
+                            // TODO: Move key to local storage
+                            parameter("apikey", "UNHDFTpeSz6RWKFEJNyiLTJiOghMGMVu")
+                            parameter("units", "metric")
+                        }
                     },
                 )
             }
