@@ -4,12 +4,14 @@ import io.decentury.mutliplatform.weatherkmm.domain.GeocodingInteractor
 import io.decentury.mutliplatform.weatherkmm.domain.GeocodingInteractorImpl
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractorImpl
-import org.kodein.di.DI
-import org.kodein.di.bindSingleton
-import org.kodein.di.instance
+import org.koin.dsl.module
 
-internal val domainModule = DI.Module("coreModule") {
+internal val domainModule = module {
 
-    bindSingleton<WeatherInteractor> { WeatherInteractorImpl(instance()) }
-    bindSingleton<GeocodingInteractor> { GeocodingInteractorImpl(instance()) }
+    single<WeatherInteractor> {
+        WeatherInteractorImpl(get())
+    }
+    single<GeocodingInteractor> {
+        GeocodingInteractorImpl(get())
+    }
 }

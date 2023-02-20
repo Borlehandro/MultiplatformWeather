@@ -8,16 +8,16 @@ import android.location.Location
 import android.os.Looper
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.animation.core.* // ktlint-disable no-wildcard-imports
+import androidx.compose.foundation.* // ktlint-disable no-wildcard-imports
+import androidx.compose.foundation.layout.* // ktlint-disable no-wildcard-imports
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.* // ktlint-disable no-wildcard-imports
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -42,17 +42,16 @@ import io.decentury.mutliplatform.weatherkmm.model.Weather
 import io.decentury.mutliplatform.weatherkmm.model.forceData
 import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherState
 import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherViewModel
+import org.koin.androidx.compose.get
 import java.util.Locale
-import org.kodein.di.compose.rememberInstance
 
 private const val GEOLOCATION_UPDATE_INTERVAL = 1_000L
 private const val SINGLE_LAUNCH_EFFECT_KEY = "SINGLE_LAUNCH_EFFECT_KEY"
 
 @SuppressLint("MissingPermission")
 @Composable
-fun WeatherScreen() {
+fun WeatherScreen(viewModel: WeatherViewModel = get()) {
     // State
-    val viewModel by rememberInstance<WeatherViewModel>()
     val state by viewModel.state.collectAsState()
     // DI
     val context = LocalContext.current

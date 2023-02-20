@@ -1,5 +1,8 @@
 package io.decentury.mutliplatform.weatherkmm.viewModel
 
+import dev.icerock.moko.mvvm.flow.CMutableStateFlow
+import dev.icerock.moko.mvvm.flow.cMutableStateFlow
+import dev.icerock.moko.mvvm.flow.cStateFlow
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.decentury.mutliplatform.weatherkmm.domain.GeocodingInteractor
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
@@ -17,19 +20,19 @@ import kotlinx.datetime.toLocalDateTime
 
 class WeatherViewModel(
     private val interactor: WeatherInteractor,
-    private val geocodingInteractor: GeocodingInteractor
+    private val geocodingInteractor: GeocodingInteractor,
 ) : ViewModel() {
     // TODO: Use cross-platform logger
 //    private val log by classLogger()
 
-    private val _state = MutableStateFlow(
+    private val _state: CMutableStateFlow<WeatherState> = MutableStateFlow(
         WeatherState(
             LoadableState.Initial,
             LoadableState.Initial,
-            LoadableState.Initial
-        )
-    )
-    val state = _state.asStateFlow()
+            LoadableState.Initial,
+        ),
+    ).cMutableStateFlow()
+    val state = _state.asStateFlow().cStateFlow()
 
     fun loadInitialData(latitude: Double, longitude: Double, locale: String) {
 //        log.d(
@@ -43,7 +46,7 @@ class WeatherViewModel(
                 },
                 viewModelScope.launch {
                     loadCurrentWeather(latitude, longitude)
-                }
+                },
             )
             loadCurrentJobs.joinAll()
             loadFutureWeather(latitude, longitude)
@@ -57,7 +60,7 @@ class WeatherViewModel(
             }
             val countryWithCity = geocodingInteractor.getCountryWithCity(
                 Location(latitude, longitude),
-                locale
+                locale,
             )
             _state.update {
                 it.copy(
@@ -73,9 +76,9 @@ class WeatherViewModel(
                                     "${date.dayOfWeek.name.substring(0, 3).toFirstCapital()}, " +
                                         "${date.month.name.substring(0, 3).toFirstCapital()} " +
                                         "${date.dayOfMonth}"
-                                }
-                        )
-                    )
+                                },
+                        ),
+                    ),
                 )
             }
         } catch (e: Exception) {
@@ -93,9 +96,9 @@ class WeatherViewModel(
                     currentWeatherState = LoadableState.Success(
                         interactor.getCurrentWeather(
                             Location(latitude, longitude),
-                            TimeZone.currentSystemDefault().id
-                        )
-                    )
+                            TimeZone.currentSystemDefault().id,
+                        ),
+                    ),
                 )
             }
         } catch (e: Exception) {
@@ -113,15 +116,15 @@ class WeatherViewModel(
                     futureWeatherState = LoadableState.Success(
                         interactor.getFutureWeather(
                             Location(latitude, longitude),
-                            TimeZone.currentSystemDefault().id
+                            TimeZone.currentSystemDefault().id,
                         ).map {
                             WeatherState.FutureWeatherItem(
                                 it.key,
                                 it.value.type,
-                                it.value.temperature
+                                it.value.temperature,
                             )
-                        }
-                    )
+                        },
+                    ),
                 )
             }
         } catch (e: Exception) {

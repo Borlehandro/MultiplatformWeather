@@ -52,9 +52,8 @@ dependencies {
     implementation(Dependencies.Android.Compose.icons)
     implementation(Dependencies.Android.Compose.tooling)
 
-    implementation(Dependencies.Kodein.androidCommon)
-    implementation(Dependencies.Kodein.androidViewModel)
-    implementation(Dependencies.Kodein.compose)
+    implementation(Dependencies.Koin.android)
+    implementation(Dependencies.Koin.compose)
 
     implementation(Dependencies.Google.locationService)
 }

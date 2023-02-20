@@ -37,15 +37,14 @@ object Dependencies {
         }
     }
 
-    object Kodein {
+    object Koin {
 
-        private const val version = "7.18.0"
+        private const val version = "3.2.0"
 
-        const val di = "org.kodein.di:kodein-di:$version"
-        const val androidCommon = "org.kodein.di:kodein-di-framework-android-x:$version"
-        const val androidViewModel =
-            "org.kodein.di:kodein-di-framework-android-x-viewmodel:$version"
-        const val compose = "org.kodein.di:kodein-di-framework-compose:$version"
+        const val core = "io.insert-koin:koin-core:$version"
+        const val test = "io.insert-koin:koin-test:$version"
+        const val android = "io.insert-koin:koin-android:$version"
+        const val compose = "io.insert-koin:koin-androidx-compose:$version"
     }
 
     object Google {

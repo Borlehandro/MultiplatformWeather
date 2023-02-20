@@ -1,10 +1,8 @@
 package io.decentury.mutliplatform.weatherkmm.di
 
 import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherViewModel
-import org.kodein.di.DI
-import org.kodein.di.bindProvider
-import org.kodein.di.instance
+import org.koin.dsl.module
 
-val viewModelsModule = DI.Module("androidViewModels") {
-    bindProvider { WeatherViewModel(instance(), instance()) }
+val viewModelsModule = module {
+    factory { WeatherViewModel(get(), get()) }
 }

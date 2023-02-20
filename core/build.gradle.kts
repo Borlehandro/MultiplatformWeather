@@ -35,7 +35,7 @@ kotlin {
                 implementation(Dependencies.Kotlin.Serialization.serialization)
                 implementation(Dependencies.Kotlin.datetime)
 
-                implementation(Dependencies.Kodein.di)
+                implementation(Dependencies.Koin.core)
 
                 implementation(Dependencies.Ktor.core)
                 implementation(Dependencies.Ktor.negotiation)

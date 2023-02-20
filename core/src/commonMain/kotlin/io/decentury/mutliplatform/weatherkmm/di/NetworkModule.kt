@@ -16,8 +16,7 @@ import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.kodein.di.DI
-import org.kodein.di.bindSingleton
+import org.koin.dsl.module
 
 private const val CONNECTION_TIMEOUT_MILLIS = 10_000L
 private const val REQUEST_TIMEOUT_MILLIS = 30_000L
@@ -25,9 +24,9 @@ private const val REQUEST_TIMEOUT_MILLIS = 30_000L
 private const val WEATHER_HOST = "api.tomorrow.io"
 private const val BASE_HEATHER_HOST_URL = "https://$WEATHER_HOST/v4/"
 
-internal val networkModule = DI.Module("networkModule") {
+internal val networkModule = module {
 
-    bindSingleton {
+    single {
         HttpClient(HttpEngineFactory().createEngine()) {
             install(Logging) {
                 logger = Logger.SIMPLE

@@ -6,18 +6,16 @@ import io.decentury.mutliplatform.weatherkmm.data.repository.WeatherRepository
 import io.decentury.mutliplatform.weatherkmm.data.repository.WeatherRepositoryImpl
 import io.decentury.mutliplatform.weatherkmm.network.geocoding.GeocodingApi
 import io.decentury.mutliplatform.weatherkmm.network.weather.WeatherApi
-import org.kodein.di.DI
-import org.kodein.di.bindSingleton
-import org.kodein.di.instance
+import org.koin.dsl.module
 
-internal val dataModule = DI.Module("dataModule") {
+internal val dataModule = module {
 
-    bindSingleton<WeatherRepository> { WeatherRepositoryImpl(instance()) }
-    bindSingleton<GeocodingRepository> { GeocodingRepositoryImpl(instance()) }
+    single<WeatherRepository> { WeatherRepositoryImpl(get()) }
+    single<GeocodingRepository> { GeocodingRepositoryImpl(GeocodingApi(get())) }
 }
 
-internal val apiModule = DI.Module("apiModule") {
+internal val apiModule = module {
 
-    bindSingleton { WeatherApi(instance()) }
-    bindSingleton { GeocodingApi(instance()) }
+    single { WeatherApi(get()) }
+    single { GeocodingApi(get()) }
 }
