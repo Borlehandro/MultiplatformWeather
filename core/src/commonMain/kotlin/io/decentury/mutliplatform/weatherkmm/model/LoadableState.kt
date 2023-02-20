@@ -1,4 +1,4 @@
-package io.decentury.mutliplatform.weatherkmm.android.common.model
+package io.decentury.mutliplatform.weatherkmm.model
 
 @Suppress("Unused")
 sealed class LoadableState<out T> {

@@ -1,11 +1,9 @@
-package io.decentury.mutliplatform.weatherkmm.android.ui.weather
+package io.decentury.mutliplatform.weatherkmm.viewModel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import io.decentury.mutliplatform.weatherkmm.android.common.model.LoadableState
-import io.decentury.mutliplatform.weatherkmm.android.common.util.classLogger
+import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import io.decentury.mutliplatform.weatherkmm.domain.GeocodingInteractor
 import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
+import io.decentury.mutliplatform.weatherkmm.model.LoadableState
 import io.decentury.mutliplatform.weatherkmm.model.Location
 import io.decentury.mutliplatform.weatherkmm.utils.toFirstCapital
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,25 +17,25 @@ import kotlinx.datetime.toLocalDateTime
 
 class WeatherViewModel(
     private val interactor: WeatherInteractor,
-    private val geocodingInteractor: GeocodingInteractor,
+    private val geocodingInteractor: GeocodingInteractor
 ) : ViewModel() {
-
-    private val log by classLogger()
+    // TODO: Use cross-platform logger
+//    private val log by classLogger()
 
     private val _state = MutableStateFlow(
         WeatherState(
             LoadableState.Initial,
             LoadableState.Initial,
-            LoadableState.Initial,
-        ),
+            LoadableState.Initial
+        )
     )
     val state = _state.asStateFlow()
 
     fun loadInitialData(latitude: Double, longitude: Double, locale: String) {
-        log.d(
-            "Load initial data for location. Latitude: $latitude; longitude: $longitude. " +
-                "User device locale: $locale.",
-        )
+//        log.d(
+//            "Load initial data for location. Latitude: $latitude; longitude: $longitude. " +
+//                    "User device locale: $locale.",
+//        )
         viewModelScope.launch {
             val loadCurrentJobs = listOf(
                 viewModelScope.launch {
@@ -45,7 +43,7 @@ class WeatherViewModel(
                 },
                 viewModelScope.launch {
                     loadCurrentWeather(latitude, longitude)
-                },
+                }
             )
             loadCurrentJobs.joinAll()
             loadFutureWeather(latitude, longitude)
@@ -59,7 +57,7 @@ class WeatherViewModel(
             }
             val countryWithCity = geocodingInteractor.getCountryWithCity(
                 Location(latitude, longitude),
-                locale,
+                locale
             )
             _state.update {
                 it.copy(
@@ -75,9 +73,9 @@ class WeatherViewModel(
                                     "${date.dayOfWeek.name.substring(0, 3).toFirstCapital()}, " +
                                         "${date.month.name.substring(0, 3).toFirstCapital()} " +
                                         "${date.dayOfMonth}"
-                                },
-                        ),
-                    ),
+                                }
+                        )
+                    )
                 )
             }
         } catch (e: Exception) {
@@ -95,9 +93,9 @@ class WeatherViewModel(
                     currentWeatherState = LoadableState.Success(
                         interactor.getCurrentWeather(
                             Location(latitude, longitude),
-                            TimeZone.currentSystemDefault().id,
-                        ),
-                    ),
+                            TimeZone.currentSystemDefault().id
+                        )
+                    )
                 )
             }
         } catch (e: Exception) {
@@ -115,15 +113,15 @@ class WeatherViewModel(
                     futureWeatherState = LoadableState.Success(
                         interactor.getFutureWeather(
                             Location(latitude, longitude),
-                            TimeZone.currentSystemDefault().id,
+                            TimeZone.currentSystemDefault().id
                         ).map {
                             WeatherState.FutureWeatherItem(
                                 it.key,
                                 it.value.type,
-                                it.value.temperature,
+                                it.value.temperature
                             )
-                        },
-                    ),
+                        }
+                    )
                 )
             }
         } catch (e: Exception) {

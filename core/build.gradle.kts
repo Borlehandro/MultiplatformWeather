@@ -41,6 +41,9 @@ kotlin {
                 implementation(Dependencies.Ktor.negotiation)
                 implementation(Dependencies.Ktor.serialization)
                 implementation(Dependencies.Ktor.logging)
+
+                api(Dependencies.ViewModel.core)
+                api(Dependencies.ViewModel.flow)
             }
         }
         val commonTest by getting {

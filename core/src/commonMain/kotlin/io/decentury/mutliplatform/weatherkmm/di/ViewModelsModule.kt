@@ -1,6 +1,6 @@
-package io.decentury.mutliplatform.weatherkmm.android.di
+package io.decentury.mutliplatform.weatherkmm.di
 
-import io.decentury.mutliplatform.weatherkmm.android.ui.weather.WeatherViewModel
+import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherViewModel
 import org.kodein.di.DI
 import org.kodein.di.bindProvider
 import org.kodein.di.instance

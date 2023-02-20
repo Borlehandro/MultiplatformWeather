@@ -35,11 +35,13 @@ import com.google.android.gms.location.LocationListener
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import io.decentury.mutliplatform.weatherkmm.android.R
-import io.decentury.mutliplatform.weatherkmm.android.common.model.LoadableState
-import io.decentury.mutliplatform.weatherkmm.android.common.model.forceData
 import io.decentury.mutliplatform.weatherkmm.android.ui.common.Colors
 import io.decentury.mutliplatform.weatherkmm.android.ui.common.ShimmerSpacer
+import io.decentury.mutliplatform.weatherkmm.model.LoadableState
 import io.decentury.mutliplatform.weatherkmm.model.Weather
+import io.decentury.mutliplatform.weatherkmm.model.forceData
+import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherState
+import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherViewModel
 import java.util.Locale
 import org.kodein.di.compose.rememberInstance
 

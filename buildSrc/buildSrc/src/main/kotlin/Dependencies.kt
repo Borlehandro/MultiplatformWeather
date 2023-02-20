@@ -65,4 +65,12 @@ object Dependencies {
         const val android = "io.ktor:ktor-client-android:$version"
         const val darwin = "io.ktor:ktor-client-darwin:$version"
     }
+
+    object ViewModel {
+
+        private const val version = "0.15.0"
+
+        const val core = "dev.icerock.moko:mvvm-core:$version"
+        const val flow = "dev.icerock.moko:mvvm-flow:$version"
+    }
 }
