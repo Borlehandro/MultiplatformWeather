@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.* // ktlint-disable no-wildcard-imports
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -43,19 +44,22 @@ import io.decentury.mutliplatform.weatherkmm.model.forceData
 import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherState
 import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherViewModel
 import org.koin.androidx.compose.get
+import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
 private const val GEOLOCATION_UPDATE_INTERVAL = 1_000L
-private const val SINGLE_LAUNCH_EFFECT_KEY = "SINGLE_LAUNCH_EFFECT_KEY"
 
 @SuppressLint("MissingPermission")
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel = get()) {
+fun WeatherScreen(viewModel: WeatherViewModel = koinViewModel()) {
     // State
     val state by viewModel.state.collectAsState()
     // DI
     val context = LocalContext.current
     // Location
+    var initialDataLoadedState by rememberSaveable {
+        mutableStateOf(false)
+    }
     val locationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
@@ -83,15 +87,18 @@ fun WeatherScreen(viewModel: WeatherViewModel = get()) {
         },
     )
     val scrollState = rememberScrollState()
-    LaunchedEffect(SINGLE_LAUNCH_EFFECT_KEY) {
-        if (!isLocationAccessPermitted(context)) {
-            launcher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-        } else {
-            locationClient.requestLocationUpdates(
-                LocationRequest.Builder(GEOLOCATION_UPDATE_INTERVAL).build(),
-                locationListener,
-                Looper.getMainLooper(),
-            )
+    if (!initialDataLoadedState) {
+        LaunchedEffect(Unit) {
+            if (!isLocationAccessPermitted(context)) {
+                launcher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+            } else {
+                locationClient.requestLocationUpdates(
+                    LocationRequest.Builder(GEOLOCATION_UPDATE_INTERVAL).build(),
+                    locationListener,
+                    Looper.getMainLooper(),
+                )
+            }
+            initialDataLoadedState = true
         }
     }
     Column(
