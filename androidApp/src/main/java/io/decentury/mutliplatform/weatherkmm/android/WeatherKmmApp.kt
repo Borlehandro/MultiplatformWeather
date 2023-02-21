@@ -1,7 +1,7 @@
 package io.decentury.mutliplatform.weatherkmm.android
 
 import android.app.Application
-import io.decentury.mutliplatform.weatherkmm.di.CoreInjector
+import io.decentury.mutliplatform.weatherkmm.di.coreModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -11,7 +11,7 @@ class WeatherKmmApp : Application() {
 
         startKoin {
             androidContext(this@WeatherKmmApp)
-            modules(CoreInjector.coreModule())
+            modules(listOf(coreModule))
         }
     }
 }

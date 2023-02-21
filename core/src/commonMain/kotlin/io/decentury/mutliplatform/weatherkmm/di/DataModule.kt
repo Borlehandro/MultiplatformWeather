@@ -11,7 +11,7 @@ import org.koin.dsl.module
 internal val dataModule = module {
 
     single<WeatherRepository> { WeatherRepositoryImpl(get()) }
-    single<GeocodingRepository> { GeocodingRepositoryImpl(GeocodingApi(get())) }
+    single<GeocodingRepository> { GeocodingRepositoryImpl(get()) }
 }
 
 internal val apiModule = module {
