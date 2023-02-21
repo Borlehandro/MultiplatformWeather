@@ -155,7 +155,7 @@ private fun GeoAndDate(
             }
             data.country?.let {
                 Text(
-                    text = data.country,
+                    text = it,
                     color = Colors.mainText,
                     fontSize = 40.sp,
                 )
