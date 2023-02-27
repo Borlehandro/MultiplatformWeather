@@ -1,7 +1,7 @@
 object Dependencies {
 
     object Kotlin {
-        private const val version = "1.8.0"
+        private const val version = "1.7.20"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$version"
 
         private const val datetimeVersion = "0.4.0"
@@ -22,7 +22,7 @@ object Dependencies {
 
         private const val lifecycleVersion = "2.5.1"
 
-        const val gradlePlugin = "com.android.tools.build:gradle:7.4.0"
+        const val gradlePlugin = "com.android.tools.build:gradle:7.1.3"
         const val composeActivity = "androidx.activity:activity-compose:1.5.1"
         const val viewModelCompose =
             "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion"
@@ -65,11 +65,19 @@ object Dependencies {
         const val darwin = "io.ktor:ktor-client-darwin:$version"
     }
 
-    object ViewModel {
+    object Moko {
+        object ViewModel {
 
-        private const val version = "0.15.0"
+            private const val version = "0.15.0"
 
-        const val core = "dev.icerock.moko:mvvm-core:$version"
-        const val flow = "dev.icerock.moko:mvvm-flow:$version"
+            const val core = "dev.icerock.moko:mvvm-core:$version"
+            const val flow = "dev.icerock.moko:mvvm-flow:$version"
+        }
+
+        object Kswift {
+
+            const val version = "0.6.1"
+            const val plugin = "dev.icerock.moko.kswift"
+        }
     }
 }

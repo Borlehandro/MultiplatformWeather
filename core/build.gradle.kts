@@ -2,6 +2,7 @@ plugins {
     kotlin("native.cocoapods")
     id("multiplatform-setup")
     kotlin("plugin.serialization")
+    id(Dependencies.Moko.Kswift.plugin) version Dependencies.Moko.Kswift.version
 }
 
 kotlin {
@@ -24,7 +25,11 @@ kotlin {
         ios.deploymentTarget = "14.1"
         podfile = project.file("../iosApp/Podfile")
         framework {
-            baseName = "core"
+            baseName = "MultiPlatformLibrary"
+            isStatic = false
+
+            export(Dependencies.Moko.ViewModel.core)
+            export(Dependencies.Moko.ViewModel.flow)
         }
     }
 
@@ -42,8 +47,8 @@ kotlin {
                 implementation(Dependencies.Ktor.serialization)
                 implementation(Dependencies.Ktor.logging)
 
-                api(Dependencies.ViewModel.core)
-                api(Dependencies.ViewModel.flow)
+                api(Dependencies.Moko.ViewModel.core)
+                api(Dependencies.Moko.ViewModel.flow)
             }
         }
         val commonTest by getting {
@@ -87,4 +92,8 @@ android {
     defaultConfig {
         minSdk = 24
     }
+}
+
+kswift {
+    install(dev.icerock.moko.kswift.plugin.feature.SealedToSwiftEnumFeature)
 }
