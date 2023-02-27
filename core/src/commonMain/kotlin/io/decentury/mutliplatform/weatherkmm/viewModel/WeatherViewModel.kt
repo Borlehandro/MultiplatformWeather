@@ -9,6 +9,7 @@ import io.decentury.mutliplatform.weatherkmm.domain.WeatherInteractor
 import io.decentury.mutliplatform.weatherkmm.model.LoadableState
 import io.decentury.mutliplatform.weatherkmm.model.Location
 import io.decentury.mutliplatform.weatherkmm.utils.toFirstCapital
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -22,8 +23,6 @@ class WeatherViewModel(
     private val interactor: WeatherInteractor,
     private val geocodingInteractor: GeocodingInteractor,
 ) : ViewModel() {
-    // TODO: Use cross-platform logger
-//    private val log by classLogger()
 
     private val _state: CMutableStateFlow<WeatherState> = MutableStateFlow(
         WeatherState(
@@ -35,10 +34,10 @@ class WeatherViewModel(
     val state = _state.asStateFlow().cStateFlow()
 
     fun loadInitialData(latitude: Double, longitude: Double, locale: String) {
-//        log.d(
-//            "Load initial data for location. Latitude: $latitude; longitude: $longitude. " +
-//                    "User device locale: $locale.",
-//        )
+        Napier.d(
+            "Load initial data for location. Latitude: $latitude; longitude: $longitude. " +
+                "User device locale: $locale.",
+        )
         viewModelScope.launch {
             val loadCurrentJobs = listOf(
                 viewModelScope.launch {

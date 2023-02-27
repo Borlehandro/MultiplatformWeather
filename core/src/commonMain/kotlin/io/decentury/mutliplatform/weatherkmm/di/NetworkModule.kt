@@ -1,16 +1,15 @@
 package io.decentury.mutliplatform.weatherkmm.di
 
 import io.decentury.mutliplatform.weatherkmm.network.HttpEngineFactory
+import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.HttpSend
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
-import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.plugins.plugin
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
@@ -24,13 +23,18 @@ private const val REQUEST_TIMEOUT_MILLIS = 30_000L
 private const val WEATHER_HOST = "api.tomorrow.io"
 private const val BASE_HEATHER_HOST_URL = "https://$WEATHER_HOST/v4/"
 
+private const val KTOR_LOGGING_TAG = "Ktor"
+
 internal val networkModule = module {
 
     single {
         HttpClient(HttpEngineFactory().createEngine()) {
             install(Logging) {
-                logger = Logger.SIMPLE
-                level = LogLevel.ALL
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        Napier.d(tag = KTOR_LOGGING_TAG, message = message)
+                    }
+                }
             }
 
             install(DefaultRequest)

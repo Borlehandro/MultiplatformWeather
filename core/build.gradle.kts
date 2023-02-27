@@ -49,6 +49,8 @@ kotlin {
 
                 api(Dependencies.Moko.ViewModel.core)
                 api(Dependencies.Moko.ViewModel.flow)
+
+                implementation(Dependencies.NapierLogger.logging)
             }
         }
         val commonTest by getting {

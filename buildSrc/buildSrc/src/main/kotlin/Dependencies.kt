@@ -80,4 +80,11 @@ object Dependencies {
             const val plugin = "dev.icerock.moko.kswift"
         }
     }
+
+    object NapierLogger {
+
+        private const val version = "2.6.1"
+
+        const val logging = "io.github.aakira:napier:$version"
+    }
 }

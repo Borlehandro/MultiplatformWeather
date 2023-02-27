@@ -56,4 +56,5 @@ dependencies {
     implementation(Dependencies.Koin.compose)
 
     implementation(Dependencies.Google.locationService)
+    implementation(Dependencies.NapierLogger.logging)
 }

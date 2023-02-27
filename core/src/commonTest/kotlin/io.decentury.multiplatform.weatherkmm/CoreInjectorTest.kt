@@ -1,6 +1,7 @@
 package io.decentury.multiplatform.weatherkmm
 
-import io.decentury.mutliplatform.weatherkmm.di.*
+import io.decentury.mutliplatform.weatherkmm.di.CoreInjector
+import io.decentury.mutliplatform.weatherkmm.utils.SetupHelper
 import org.koin.test.KoinTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -10,7 +11,7 @@ class CoreInjectorTest : KoinTest {
 
     @BeforeTest
     fun setup() {
-        DiSetupHelper.initDi()
+        SetupHelper.setup()
     }
 
     @Test
