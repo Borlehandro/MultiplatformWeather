@@ -43,7 +43,6 @@ import io.decentury.mutliplatform.weatherkmm.model.Weather
 import io.decentury.mutliplatform.weatherkmm.model.forceData
 import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherState
 import io.decentury.mutliplatform.weatherkmm.viewModel.WeatherViewModel
-import org.koin.androidx.compose.get
 import org.koin.androidx.compose.koinViewModel
 import java.util.Locale
 
@@ -254,12 +253,18 @@ private fun TypeAndTemperature(temperature: Int, type: Weather.Type) {
             modifier = Modifier
                 .padding(start = 10.dp),
         ) {
-            Text(
-                text = temperature.toString(),
-                color = Colors.mainText,
-                fontWeight = FontWeight.W900,
-                fontSize = 90.sp,
-            )
+            Row {
+                Text(
+                    text = temperature.toString(),
+                    color = Colors.mainText,
+                    fontWeight = FontWeight.W900,
+                    fontSize = 90.sp,
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_temperature_degree),
+                    contentDescription = null,
+                )
+            }
             Text(
                 text = stringResource(
                     id = when (type) {
@@ -275,10 +280,6 @@ private fun TypeAndTemperature(temperature: Int, type: Weather.Type) {
                 modifier = Modifier.align(CenterHorizontally),
             )
         }
-        Image(
-            painter = painterResource(id = R.drawable.ic_temperature_degree),
-            contentDescription = null,
-        )
     }
 }
 
