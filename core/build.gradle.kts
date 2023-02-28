@@ -30,6 +30,7 @@ kotlin {
 
             export(Dependencies.Moko.ViewModel.core)
             export(Dependencies.Moko.ViewModel.flow)
+            export(Dependencies.Ktor.core)
         }
     }
 
@@ -42,7 +43,7 @@ kotlin {
 
                 implementation(Dependencies.Koin.core)
 
-                implementation(Dependencies.Ktor.core)
+                api(Dependencies.Ktor.core)
                 implementation(Dependencies.Ktor.negotiation)
                 implementation(Dependencies.Ktor.serialization)
                 implementation(Dependencies.Ktor.logging)
