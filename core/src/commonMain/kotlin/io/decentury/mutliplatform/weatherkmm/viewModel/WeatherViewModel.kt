@@ -113,16 +113,18 @@ class WeatherViewModel(
             _state.update { weatherState ->
                 weatherState.copy(
                     futureWeatherState = LoadableState.Success(
-                        interactor.getFutureWeather(
-                            Location(latitude, longitude),
-                            TimeZone.currentSystemDefault().id,
-                        ).map {
-                            WeatherState.FutureWeatherItem(
-                                it.key,
-                                it.value.type,
-                                it.value.temperature,
-                            )
-                        },
+                        WeatherState.FutureWeatherState(
+                            interactor.getFutureWeather(
+                                Location(latitude, longitude),
+                                TimeZone.currentSystemDefault().id,
+                            ).map {
+                                WeatherState.FutureWeatherItem(
+                                    it.key,
+                                    it.value.type,
+                                    it.value.temperature,
+                                )
+                            },
+                        ),
                     ),
                 )
             }

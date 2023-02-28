@@ -6,14 +6,14 @@ Pod::Spec.new do |spec|
     spec.authors                  = 'Alexey Borzikov'
     spec.license                  = ''
     spec.summary                  = 'Core module of Kotlin Multiplatform Mobile Weather Application'
-    spec.vendored_frameworks      = 'build/cocoapods/framework/core.framework'
+    spec.vendored_frameworks      = 'build/cocoapods/framework/MultiPlatformLibrary.framework'
     spec.libraries                = 'c++'
     spec.ios.deployment_target = '14.1'
                 
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':core',
-        'PRODUCT_MODULE_NAME' => 'core',
+        'PRODUCT_MODULE_NAME' => 'MultiPlatformLibrary',
     }
                 
     spec.script_phases = [

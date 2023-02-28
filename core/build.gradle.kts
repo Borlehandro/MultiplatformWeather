@@ -30,7 +30,6 @@ kotlin {
 
             export(Dependencies.Moko.ViewModel.core)
             export(Dependencies.Moko.ViewModel.flow)
-            export(Dependencies.Ktor.core)
         }
     }
 
@@ -43,7 +42,7 @@ kotlin {
 
                 implementation(Dependencies.Koin.core)
 
-                api(Dependencies.Ktor.core)
+                implementation(Dependencies.Ktor.core)
                 implementation(Dependencies.Ktor.negotiation)
                 implementation(Dependencies.Ktor.serialization)
                 implementation(Dependencies.Ktor.logging)
@@ -98,5 +97,7 @@ android {
 }
 
 kswift {
-    install(dev.icerock.moko.kswift.plugin.feature.SealedToSwiftEnumFeature)
+    install(dev.icerock.moko.kswift.plugin.feature.SealedToSwiftEnumFeature) {
+        filter = includeFilter("ClassContext/WeatherKmm:core/io/decentury/mutliplatform/weatherkmm/model/LoadableState")
+    }
 }

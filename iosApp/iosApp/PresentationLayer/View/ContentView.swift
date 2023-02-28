@@ -1,47 +1,75 @@
 import SwiftUI
-import core
+import MultiPlatformLibrary
+import mokoMvvmFlowSwiftUI
+import MultiPlatformLibrarySwift
+import Combine
+import CoreLocation
 
 struct ContentView: View {
-    let greet = "Test"
-    @StateObject var viewModel = MainViewModel()
+    @ObservedObject var viewModel : WeatherViewModel = CoreInjector.init().provideWeatherViewModel()
+    @ObservedObject var locationManager = LocationManager()
     var body: some View {
+        let state : WeatherState = viewModel.state(\.state, equals: {$0 == $1}, mapper: {$0 as WeatherState})
         ScrollView() {
             VStack {
-                HStack(alignment: .center) {
-                    Spacer(minLength: 20)
-                    VStack(alignment: .leading) {
-                        Text("Новосибирск")
-                            .font(.custom("Inter-Bold", size: 22))
+                switch LoadableStateKs(state.locationWithDate) {
+                case .success(let locationState):
+                    HStack(alignment: .center) {
+                        Spacer(minLength: 20)
+                        VStack(alignment: .leading) {
+                            Text("\(locationState.data!.city!), \(locationState.data!.country!)")
+                                .font(.custom("Inter-Bold", size: 22))
+                                .lineLimit(3)
+                            Text("\(locationState.data!.formattedDate)")
+                                .padding(.top, 8)
+                        }
+                        Spacer()
+                            .padding(.leading, 12)
+                    }
+                default:
+                    EmptyView()
+                }
+                switch LoadableStateKs(state.currentWeatherState) {
+                case .success(let success):
+                    let data = success.data!
+                    HStack(alignment: .center) {
+                        Image(data.type.name)
+                            .resizable()
+                            .scaledToFit()
+                            .shadow(radius: 10)
+                            .frame(width: 80, height: 80)
                             .padding(20)
-                            .lineLimit(1)
-                        Text("\(Date().formatted(.dateTime.day().month()))")
+                        VStack {
+                            Text("\(data.temperature)")
+                                .font(.custom("Inter-Bold", size: 43))
+                                .padding(0)
+                            Text(data.type.name)
+                        }
                     }
-                    Spacer()
-                        .padding(.leading, 20)
+                    paramsView(paransDescription: "\(data.rainFall) cm", imageName: "rainFallIcon", type: "Rain Fall")
+                    paramsView(paransDescription: "\(data.windSpeed) km/h", imageName: "windIcon", type: "Wind")
+                    paramsView(paransDescription: "\(data.humidity) %", imageName: "humidityIcon", type: "Humidity")
+                default:
+                    EmptyView()
                 }
-                HStack(alignment: .center) {
-                    Image(viewModel.type)
-                        .resizable()
-                        .scaledToFit()
-                        .shadow(radius: 10)
-                        .frame(width: 80, height: 80)
-                        .padding(20)
-                    VStack {
-                        Text(viewModel.temperature)
-                            .font(.custom("Inter-Bold", size: 43))
-                            .padding(0)
-                        Text(viewModel.type)
-                    }
-                }
-                paramsView(paransDescription: viewModel.windSpeed + " " + "km/h", imageName: "windIcon", type: "Wind")
-                paramsView(paransDescription: viewModel.rainFall + " " + "cm", imageName: "rainFallIcon", type: "RainFall")
-                paramsView(paransDescription: viewModel.humidity + " " + "%", imageName: "humidityIcon", type: "Humidity")
-                futureWeatherCollection()
+                Spacer()
+                futureWeatherCollection(state: LoadableStateKs(state.futureWeatherState))
             }.frame(maxWidth: .infinity)
         }
         .background(LinearGradient(colors: [.white, .orange], startPoint: .topLeading, endPoint: .bottomTrailing))
+        .onChange(
+            of: locationManager.authorizationStatus,
+            perform: {
+                if($0 == .authorizedWhenInUse || $0 == .authorizedAlways) {
+                    if let coordinate = locationManager.locationManager.location?.coordinate {
+                        viewModel.loadInitialData(latitude: coordinate.latitude, longitude: coordinate.longitude, locale: "RU_ru")
+                    }
+                }
+            }
+        )
     }
-    
+        
+
     func paramsView(paransDescription: String, imageName: String, type: String) -> some View {
             ZStack {
                 HStack {
@@ -70,47 +98,50 @@ struct ContentView: View {
             .padding(.trailing, 20)
     }
     
-    func futureWeatherCollection() -> some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 10) {
-                ForEach(0..<viewModel.futureWeatherKeys.count, id: \.self) { index in
-
-                    futureTimeeCell(index: index)
+    func futureWeatherCollection(state: LoadableStateKs<WeatherState.FutureWeatherState>) -> some View {
+        Group {
+            switch state {
+            case .success(let futureState):
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        let items = futureState.data!.items
+                        ForEach(0..<items.count, id: \.self) { index in
+                            futureTimeeCell(item: items[index])
+                        }
+                        .padding(.top, 30)
+                    }
                 }
-                .padding(.top, 30)
-            }.padding(.leading, 20)
+            default:
+                EmptyView()
+            }
         }
     }
-    
-    func futureTimeeCell(index: Int) -> some View {
+
+    func futureTimeeCell(item: WeatherState.FutureWeatherItem) -> some View {
         ZStack {
             VStack {
-                Text(viewModel.futureWeatherKeys[index])
+                Text(item.time)
                     .foregroundColor(.black)
-                    .font(.custom("Inter-Light", size: 7))
+                    .font(.custom("Inter-Light", size: 11))
                     .padding(.top, 8)
-                if !viewModel.futureWeatherType.isEmpty && index <= viewModel.futureWeatherType.count - 1 {
-                    Image(viewModel.futureWeatherType[index])
-                        .resizable()
-                        .scaledToFit()
-                        .shadow(radius: 10)
-                        .frame(width: 20, height: 20)
-                        .padding(.top, 0)
-                }
-                if !viewModel.futureWeatherTemperature.isEmpty && index <= viewModel.futureWeatherTemperature.count - 1  {
-                    Text(viewModel.futureWeatherTemperature[index])
-                        .foregroundColor(.black)
-                        .font(.custom("Inter-Bold", size: 7))
-                        .padding(.top, 0)
-                        .padding(.bottom, 8)
-                }
+                Image(item.type.name)
+                    .resizable()
+                    .scaledToFit()
+                    .shadow(radius: 10)
+                    .frame(width: 20, height: 20)
+                    .padding(.top, 0)
+                Text("\(item.temperature)")
+                    .foregroundColor(.black)
+                    .font(.custom("Inter-Bold", size: 11))
+                    .padding(.top, 0)
+                    .padding(.bottom, 8)
             }
-            .frame(width: 32, height: 60)
+            .frame(width: 45, height: 90)
             .background(Color.white)
             .opacity(0.7)
             .cornerRadius(20)
         }
-        
+
     }
 }
 

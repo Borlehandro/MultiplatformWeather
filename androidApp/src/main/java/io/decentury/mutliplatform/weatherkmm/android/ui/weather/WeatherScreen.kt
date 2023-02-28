@@ -350,14 +350,14 @@ private fun DetailsItem(value: Int, type: String, measure: String, drawableId: I
 }
 
 @Composable
-private fun FutureWeather(state: LoadableState<List<WeatherState.FutureWeatherItem>>) {
+private fun FutureWeather(state: LoadableState<WeatherState.FutureWeatherState>) {
     Column {
         Divider(
             Modifier.padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
             thickness = 1.dp,
             color = Colors.bgGray36,
         )
-        WeatherByHourList(state.forceData())
+        WeatherByHourList(state.forceData()?.items)
     }
 }
 
