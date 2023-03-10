@@ -43,7 +43,7 @@ struct ContentView: View {
                             Text("\(data.temperature)")
                                 .font(.custom("Inter-Bold", size: 43))
                                 .padding(0)
-                            Text(data.type.name)
+                            Text(typeText(type: data.type))
                         }
                     }
                     paramsView(paransDescription: "\(data.rainFall) cm", imageName: "rainFallIcon", type: "Rain Fall")
@@ -52,7 +52,7 @@ struct ContentView: View {
                 default:
                     EmptyView()
                 }
-                Spacer()
+                Spacer().frame(height: 16)
                 futureWeatherCollection(state: LoadableStateKs(state.futureWeatherState))
             }.frame(maxWidth: .infinity)
         }
@@ -108,8 +108,8 @@ struct ContentView: View {
                         ForEach(0..<items.count, id: \.self) { index in
                             futureTimeeCell(item: items[index])
                         }
-                        .padding(.top, 30)
                     }
+                    .padding(.leading, 16)
                 }
             default:
                 EmptyView()
@@ -142,6 +142,23 @@ struct ContentView: View {
             .cornerRadius(20)
         }
 
+    }
+}
+
+private func typeText(type: Weather.Type_) -> String {
+    switch type {
+    case .clear:
+        return "Clear"
+    case .cloudy:
+        return "Cloudy"
+    case .cloudyRain:
+        return "Rain"
+    case .partyCloudy:
+        return "Party cloudy"
+    case .partyCloudyRain:
+        return "Rainy"
+    default:
+        return "Clear"
     }
 }
 
